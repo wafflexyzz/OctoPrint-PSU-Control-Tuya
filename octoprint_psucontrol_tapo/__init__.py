@@ -2,53 +2,54 @@
 from __future__ import absolute_import
 import threading
 
-__author__ = "Dennis Schwerdel <schwerdel@gmail.com>"
+__author__ = "Dennis Schwerdel <schwerdel@gmail.com>, Modified for Arlec by User"
 __license__ = "GNU Affero General Public License http://www.gnu.org/licenses/agpl.html"
 __copyright__ = "Copyright (C) 2022 Dennis Schwerdel - Released under terms of the AGPLv3 License"
 
 import octoprint.plugin
-from .tapo import P100
-from . import tapo
+from .arlec import ArlecSmartPlug
+from . import arlec
 
-class PSUControl_Tapo(octoprint.plugin.StartupPlugin,
-                      octoprint.plugin.RestartNeedingPlugin,
-                      octoprint.plugin.TemplatePlugin,
-                      octoprint.plugin.SettingsPlugin):
+
+class PSUControl_Arlec(octoprint.plugin.StartupPlugin,
+                       octoprint.plugin.RestartNeedingPlugin,
+                       octoprint.plugin.TemplatePlugin,
+                       octoprint.plugin.SettingsPlugin):
 
     def __init__(self):
         self.config = dict()
         self.device = None
         self.last_status = None
 
-
     def get_settings_defaults(self):
         return dict(
-            address = '',
-            username = '',
-            password = ''
+            address='',
+            device_id='',
+            local_key='',
+            version='3.3'
         )
-
 
     def on_settings_initialized(self):
         self.reload_settings()
-
 
     def on_settings_save(self, data):
         octoprint.plugin.SettingsPlugin.on_settings_save(self, data)
         self.reload_settings()
 
-
     def get_settings_version(self):
         return 1
-
 
     def on_settings_migrate(self, target, current=None):
         pass
 
-
     def _reconnect(self):
-        self._logger.info(f"Connecting to Tapo device at {self.config['address']}")
-        self.device = P100(self.config["address"], self.config["username"], self.config["password"])
+        self._logger.info(f"Connecting to Arlec device at {self.config['address']}")
+        self.device = ArlecSmartPlug(
+            self.config["address"],
+            self.config["device_id"],
+            self.config["local_key"],
+            self.config["version"]
+        )
 
     def reload_settings(self):
         for k, v in self.get_settings_defaults().items():
@@ -65,11 +66,10 @@ class PSUControl_Tapo(octoprint.plugin.StartupPlugin,
             self._logger.debug("{}: {}".format(k, v))
         try:
             self._logger.info(f"Config: {self.config}")
-            tapo.log = self._logger
+            arlec.log = self._logger
             self._reconnect()
         except:
-            self._logger.exception(f"Failed to connect to Tapo device")
-
+            self._logger.exception(f"Failed to connect to Arlec device")
 
     def on_startup(self, host, port):
         psucontrol_helpers = self._plugin_manager.get_helpers("psucontrol")
@@ -79,7 +79,6 @@ class PSUControl_Tapo(octoprint.plugin.StartupPlugin,
 
         self._logger.debug("Registering plugin with PSUControl")
         psucontrol_helpers['register_plugin'](self)
-
 
     def turn_psu_on(self):
         if not self.device:
@@ -105,7 +104,6 @@ class PSUControl_Tapo(octoprint.plugin.StartupPlugin,
             self.device = None
             raise
 
-
     def _fetch_psu_state(self):
         if not self.device:
             self._reconnect()
@@ -129,30 +127,31 @@ class PSUControl_Tapo(octoprint.plugin.StartupPlugin,
             dict(type="settings", custom_bindings=False)
         ]
 
-
     def get_update_information(self):
         return dict(
-            psucontrol_tapo=dict(
-                displayName="PSU Control - Tapo",
+            psucontrol_arlec=dict(
+                displayName="PSU Control - Arlec",
                 displayVersion=self._plugin_version,
 
                 # version check: github repository
                 type="github_release",
-                user="dswd",
-                repo="OctoPrint-PSUControl-Tapo",
+                user="your-github-username",
+                repo="OctoPrint-PSUControl-Arlec",
                 current=self._plugin_version,
 
                 # update method: pip w/ dependency links
-                pip="https://github.com/dswd/OctoPrint-PSUControl-Tapo/archive/{target_version}.zip"
+                pip="https://github.com/your-github-username/OctoPrint-PSUControl-Arlec/archive/{target_version}.zip"
             )
         )
 
-__plugin_name__ = "PSU Control - Tapo"
-__plugin_pythoncompat__ = ">=2.7,<4"
+
+__plugin_name__ = "PSU Control - Arlec"
+__plugin_pythoncompat__ = ">=3.7,<4"
+
 
 def __plugin_load__():
     global __plugin_implementation__
-    __plugin_implementation__ = PSUControl_Tapo()
+    __plugin_implementation__ = PSUControl_Arlec()
 
     global __plugin_hooks__
     __plugin_hooks__ = {

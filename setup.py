@@ -3,14 +3,14 @@ import setuptools
 
 ########################################################################################################################
 
-plugin_identifier = "psucontrol_tapo"
+plugin_identifier = "psucontrol_tapo"  # Keep the same identifier for backwards compatibility with settings
 plugin_package = "octoprint_%s" % plugin_identifier
-plugin_name = "OctoPrint-PSUControl-Tapo"
-plugin_version = "0.4.0"
-plugin_description = "Adds Tapo Smart Plug support to OctoPrint-PSUControl as a sub-plugin"
-plugin_author = "Dennis Schwerdel"
-plugin_author_email = "schwerdel@gmail.com"
-plugin_url = "https://github.com/dswd/OctoPrint-PSUControl-Tapo"
+plugin_name = "OctoPrint-PSUControl-Arlec"
+plugin_version = "1.0.0"
+plugin_description = "Adds Arlec (Tuya-based) Smart Plug support to OctoPrint-PSUControl as a sub-plugin"
+plugin_author = "Your Name"
+plugin_author_email = "your-email@example.com"
+plugin_url = "https://github.com/your-github-username/OctoPrint-PSUControl-Arlec"
 plugin_license = "AGPLv3"
 plugin_additional_data = []
 

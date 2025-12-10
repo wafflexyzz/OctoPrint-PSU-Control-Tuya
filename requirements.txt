@@ -1,3 +1,2 @@
 OctoPrint
-requests
-pycryptodome
+tinytuya>=1.12.0

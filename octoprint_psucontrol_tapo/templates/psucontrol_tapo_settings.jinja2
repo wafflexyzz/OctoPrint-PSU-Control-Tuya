@@ -3,23 +3,73 @@
 <!-- /ko -->
 
 <form class="form-horizontal">
-    <h4>General</h4>
+    <h4>Arlec Smart Plug Settings</h4>
+    
+    <div class="alert alert-info">
+        <strong>Note:</strong> To obtain your Device ID and Local Key, you need to set up a 
+        <a href="https://developer.tuya.com/" target="_blank">Tuya Developer account</a> and link your device, 
+        or use the <code>tinytuya wizard</code> command. 
+        See the <a href="https://github.com/jasonacox/tinytuya#setup-wizard" target="_blank">tinytuya documentation</a> for detailed instructions.
+    </div>
+    
     <div class="control-group">
-        <label class="control-label">Address</label>
+        <label class="control-label">IP Address</label>
         <div class="controls">
-            <input type="text" class="input" data-bind="value: settings.plugins.psucontrol_tapo.address" placeholder="p100">
+            <input type="text" class="input" data-bind="value: settings.plugins.psucontrol_tapo.address" placeholder="192.168.1.100">
+            <span class="help-inline">Local IP address of your Arlec smart plug (use static IP)</span>
         </div>
     </div>
+    
     <div class="control-group">
-        <label class="control-label">Username</label>
+        <label class="control-label">Device ID</label>
         <div class="controls">
-            <input type="text" class="input" data-bind="value: settings.plugins.psucontrol_tapo.username" placeholder="">
+            <input type="text" class="input" data-bind="value: settings.plugins.psucontrol_tapo.device_id" placeholder="bf123456789abcdef">
+            <span class="help-inline">Tuya Device ID (from Tuya Developer account or tinytuya wizard)</span>
         </div>
     </div>
+    
     <div class="control-group">
-        <label class="control-label">Password</label>
+        <label class="control-label">Local Key</label>
         <div class="controls">
-            <input type="password" class="input" data-bind="value: settings.plugins.psucontrol_tapo.password" placeholder="">
+            <input type="password" class="input" data-bind="value: settings.plugins.psucontrol_tapo.local_key" placeholder="">
+            <span class="help-inline">Tuya Local Key for device encryption (from Tuya Developer account or tinytuya wizard)</span>
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label class="control-label">Protocol Version</label>
+        <div class="controls">
+            <select class="input" data-bind="value: settings.plugins.psucontrol_tapo.version">
+                <option value="3.1">3.1</option>
+                <option value="3.2">3.2</option>
+                <option value="3.3">3.3 (Most Common)</option>
+                <option value="3.4">3.4</option>
+                <option value="3.5">3.5</option>
+            </select>
+            <span class="help-inline">Tuya protocol version (try 3.3 first, then 3.4 or 3.5 if it doesn't work)</span>
         </div>
     </div>
 </form>
+
+<h4>Getting Device Credentials</h4>
+<div class="help-block">
+    <p>To control your Arlec smart plug locally, you need the Device ID and Local Key. Here's how to get them:</p>
+    <ol>
+        <li><strong>Easy Method - Using tinytuya wizard:</strong>
+            <ul>
+                <li>Install tinytuya: <code>pip install tinytuya</code></li>
+                <li>Run the wizard: <code>python -m tinytuya wizard</code></li>
+                <li>Follow the prompts to link your Tuya account</li>
+            </ul>
+        </li>
+        <li><strong>Manual Method - Tuya Developer Portal:</strong>
+            <ul>
+                <li>Create an account at <a href="https://developer.tuya.com/" target="_blank">developer.tuya.com</a></li>
+                <li>Create a Cloud Project and link your device app (e.g., Smart Life, Tuya Smart)</li>
+                <li>Add your device to the project</li>
+                <li>Find the Device ID and Local Key in the device details</li>
+            </ul>
+        </li>
+    </ol>
+    <p><strong>Tip:</strong> Set a static IP for your smart plug in your router's DHCP settings to prevent connection issues.</p>
+</div>

@@ -2,3 +2,16 @@ OctoPrint_*.egg-info
 .idea
 *.swp
 __pycache__
+*.pyc
+output/*
+venv/*
+.clinerules/*
+.cursor/*
+.roo/*
+
+# Tuya credential files (contain sensitive device keys - DO NOT COMMIT)
+devices.json
+snapshot.json
+tinytuya.json
+tuya-raw.json
+*.keys
