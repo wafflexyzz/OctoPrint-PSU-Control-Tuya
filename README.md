@@ -23,12 +23,12 @@ This plugin works with Tuya-based smart plugs, including:
 3. Click "Get More"
 4. Search for "PSU Control - Tuya" or install from URL:
    ```
-   https://github.com/wafflexyzz/OctoPrint-PSU-Control-Tuya/archive/main.zip
-   ```
+[   https://github.com/wafflexyzz/OctoPrint-PSU-Control-Tuya/archive/main.zip
+](https://github.com/wafflexyzz/OctoPrint-PSU-Control-Tuya/archive/refs/heads/main.zip)   ```
 
 ### Manual Installation
 ```bash
-pip install https://github.com/wafflexyzz/OctoPrint-PSU-Control-Tuya/archive/main.zip
+pip install [https://github.com/wafflexyzz/OctoPrint-PSU-Control-Tuya/archive/main.zip](https://github.com/wafflexyzz/OctoPrint-PSU-Control-Tuya/archive/refs/heads/main.zip)
 ```
 
 ## Configuration
