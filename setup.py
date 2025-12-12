@@ -5,12 +5,12 @@ import setuptools
 
 plugin_identifier = "psucontrol_tapo"  # Keep the same identifier for backwards compatibility with settings
 plugin_package = "octoprint_%s" % plugin_identifier
-plugin_name = "OctoPrint-PSUControl-Arlec"
-plugin_version = "1.0.0"
-plugin_description = "Adds Arlec (Tuya-based) Smart Plug support to OctoPrint-PSUControl as a sub-plugin"
+plugin_name = "OctoPrint-PSUControl-Shenzhen"
+plugin_version = "2.0.0"
+plugin_description = "Adds Shenzhen SM-PW701A1 Smart Outlet support to OctoPrint-PSUControl (Tasmota + Tuya)"
 plugin_author = "Your Name"
 plugin_author_email = "your-email@example.com"
-plugin_url = "https://github.com/your-github-username/OctoPrint-PSUControl-Arlec"
+plugin_url = "https://github.com/your-github-username/OctoPrint-PSU-Control-Shenzhen"
 plugin_license = "AGPLv3"
 plugin_additional_data = []
 

@@ -3,21 +3,76 @@
 <!-- /ko -->
 
 <form class="form-horizontal">
-    <h4>Arlec Smart Plug Settings</h4>
+    <h4>Smart Outlet Settings</h4>
     
-    <div class="alert alert-info">
-        <strong>Note:</strong> To obtain your Device ID and Local Key, you need to set up a 
-        <a href="https://developer.tuya.com/" target="_blank">Tuya Developer account</a> and link your device, 
-        or use the <code>tinytuya wizard</code> command. 
-        See the <a href="https://github.com/jasonacox/tinytuya#setup-wizard" target="_blank">tinytuya documentation</a> for detailed instructions.
+    <div class="alert alert-success">
+        <strong>Tip:</strong> For the most reliable connection, flash custom firmware on your smart plug:
+        <ul style="margin-top: 5px; margin-bottom: 0;">
+            <li><strong>Arlec PC191HA Series 2:</strong> Flash <a href="https://github.com/openshwprojects/OpenBK7231T_App" target="_blank">OpenBeken</a> using <a href="https://github.com/tuya-cloudcutter/tuya-cloudcutter" target="_blank">Cloudcutter</a> (no soldering!)</li>
+            <li><strong>ESP8266-based plugs:</strong> Flash <a href="https://tasmota.github.io/docs/" target="_blank">Tasmota</a></li>
+        </ul>
+        Both use the same HTTP API - select "Tasmota/OpenBeken" protocol below.
+    </div>
+    
+    <div class="control-group">
+        <label class="control-label">Protocol</label>
+        <div class="controls">
+            <select class="input" data-bind="value: settings.plugins.psucontrol_tapo.protocol">
+                <option value="tasmota">Tasmota / OpenBeken (Recommended - requires flashing)</option>
+                <option value="tuya">Tuya (Stock firmware - may have connection drops)</option>
+            </select>
+            <span class="help-inline">Select the control protocol for your smart outlet</span>
+        </div>
     </div>
     
     <div class="control-group">
         <label class="control-label">IP Address</label>
         <div class="controls">
             <input type="text" class="input" data-bind="value: settings.plugins.psucontrol_tapo.address" placeholder="192.168.1.100">
-            <span class="help-inline">Local IP address of your Arlec smart plug (use static IP)</span>
+            <span class="help-inline">Local IP address of your smart outlet (use static IP)</span>
         </div>
+    </div>
+    
+    <!-- Tasmota/OpenBeken Settings -->
+    <!-- ko if: settings.plugins.psucontrol_tapo.protocol() === 'tasmota' -->
+    <h5 style="margin-top: 20px; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Tasmota / OpenBeken Settings</h5>
+    
+    <div class="alert alert-info">
+        <strong>Note:</strong> Username and password are only required if you've configured 
+        web authentication. Most users can leave these blank.
+    </div>
+    
+    <div class="control-group">
+        <label class="control-label">Username (optional)</label>
+        <div class="controls">
+            <input type="text" class="input" data-bind="value: settings.plugins.psucontrol_tapo.tasmota_username" placeholder="">
+            <span class="help-inline">Tasmota web admin username (if configured)</span>
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label class="control-label">Password (optional)</label>
+        <div class="controls">
+            <input type="password" class="input" data-bind="value: settings.plugins.psucontrol_tapo.tasmota_password" placeholder="">
+            <span class="help-inline">Tasmota web admin password (if configured)</span>
+        </div>
+    </div>
+    <!-- /ko -->
+    
+    <!-- Tuya Settings -->
+    <!-- ko if: settings.plugins.psucontrol_tapo.protocol() === 'tuya' -->
+    <h5 style="margin-top: 20px; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Tuya Settings (Stock Firmware)</h5>
+    
+    <div class="alert alert-warning">
+        <strong>Warning:</strong> Tuya devices may experience connection drops due to cloud dependency. 
+        If you experience frequent disconnections, consider flashing Tasmota firmware for more reliable local control.
+    </div>
+    
+    <div class="alert alert-info">
+        <strong>Note:</strong> To obtain your Device ID and Local Key, you need to set up a 
+        <a href="https://developer.tuya.com/" target="_blank">Tuya Developer account</a> and link your device, 
+        or use the <code>tinytuya wizard</code> command. 
+        See the <a href="https://github.com/jasonacox/tinytuya#setup-wizard" target="_blank">tinytuya documentation</a> for detailed instructions.
     </div>
     
     <div class="control-group">
@@ -49,11 +104,36 @@
             <span class="help-inline">Tuya protocol version (try 3.3 first, then 3.4 or 3.5 if it doesn't work)</span>
         </div>
     </div>
+    <!-- /ko -->
 </form>
 
-<h4>Getting Device Credentials</h4>
+<h4>Setup Instructions</h4>
 <div class="help-block">
-    <p>To control your Arlec smart plug locally, you need the Device ID and Local Key. Here's how to get them:</p>
+    <!-- ko if: settings.plugins.psucontrol_tapo.protocol() === 'tasmota' -->
+    <h5>Flashing Custom Firmware</h5>
+    
+    <p><strong>For Arlec PC191HA Series 2 (BK7231 chip):</strong></p>
+    <ol>
+        <li>Use <a href="https://github.com/tuya-cloudcutter/tuya-cloudcutter" target="_blank">Tuya Cloudcutter</a> to flash <strong>OpenBeken</strong> (no soldering!)</li>
+        <li>Select profile: <code>1.1.8 – BK7231N / oem_bk7231n_plug</code></li>
+        <li>Connect to <code>OpenBK7231N_XXXX</code> WiFi hotspot after flashing</li>
+        <li>Configure GPIOs: GPIO24=Relay, GPIO10=Button, GPIO26=WiFi LED</li>
+        <li>Set a static IP in your router</li>
+    </ol>
+    
+    <p><strong>For ESP8266-based plugs:</strong></p>
+    <ol>
+        <li>Use <a href="https://github.com/tuya-cloudcutter/tuya-cloudcutter" target="_blank">Tuya Cloudcutter</a> to flash <strong>Tasmota</strong></li>
+        <li>Connect to <code>tasmota-XXXX</code> WiFi hotspot</li>
+        <li>Apply device template from <a href="https://templates.blakadder.com/" target="_blank">Tasmota Templates</a></li>
+        <li>Set a static IP in your router</li>
+    </ol>
+    
+    <p><strong>Test:</strong> Visit <code>http://YOUR_IP</code> to access the web interface</p>
+    <!-- /ko -->
+    
+    <!-- ko if: settings.plugins.psucontrol_tapo.protocol() === 'tuya' -->
+    <h5>Getting Tuya Device Credentials</h5>
     <ol>
         <li><strong>Easy Method - Using tinytuya wizard:</strong>
             <ul>
@@ -71,5 +151,7 @@
             </ul>
         </li>
     </ol>
-    <p><strong>Tip:</strong> Set a static IP for your smart plug in your router's DHCP settings to prevent connection issues.</p>
+    <!-- /ko -->
+    
+    <p><strong>Tip:</strong> Set a static IP for your smart outlet in your router's DHCP settings to prevent connection issues.</p>
 </div>
